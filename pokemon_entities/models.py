@@ -2,7 +2,6 @@ from django.db import models
 
 # your models here
 
-
 class Pokemon(models.Model):
     """Покемон"""
     title = models.CharField(max_length=200)
@@ -13,6 +12,6 @@ class Pokemon(models.Model):
 
 
 class PokemonEntity(models.Model):
-    lat = models.FloatField(blank=True)
-    lon = models.FloatField(blank=True)
+    lat = models.FloatField(null=True, blank=True)
+    lon = models.FloatField(null=True, blank=True)
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
