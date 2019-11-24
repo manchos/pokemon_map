@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pokemon_entities.exposed_request.RequestExposerMiddleware'
 ]
 
 ROOT_URLCONF = 'pogomap.urls'
@@ -128,6 +129,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
-SHELL_PLUS_PRINT_SQL = True
-SHELL_PLUS = "ipython"
+# SHELL_PLUS_PRINT_SQL = True
+# SHELL_PLUS = "ipython"
 

@@ -1,13 +1,14 @@
 from django.db import models
 
 
-# your models here
+# used for img_url by pokemon_entities.exposed_request.RequestExposerMiddleware
+exposed_request = ''
 
 
 class Pokemon(models.Model):
     """Покемон"""
     title_ru = models.CharField(
-        max_length=200, default='', blank=True, verbose_name='Имя по-русски')
+        max_length=200, verbose_name='Имя по-русски')
     title_en = models.CharField(
         max_length=200, default='', blank=True, verbose_name='Имя по-аглицки')
     title_jp = models.CharField(
@@ -15,7 +16,7 @@ class Pokemon(models.Model):
     description = models.TextField(
        default='', blank=True, verbose_name='Описание')
     photo = models.ImageField(
-        upload_to='pokemons', null=True, verbose_name='Изображение')
+        upload_to='pokemons', verbose_name='Изображение')
     previous_evolution = models.ForeignKey(
         'self',
         verbose_name='Из кого эволюционирует',
@@ -24,21 +25,26 @@ class Pokemon(models.Model):
         related_name='next_evolutions'
     )
 
+    @property
+    def img_url(self):
+        return exposed_request.build_absolute_uri(self.photo.url)
+
+    @property
+    def pokemon_id(self):
+        return self.id
 
     def __str__(self):
         return f"{self.title_ru}"
 
 
 class PokemonEntity(models.Model):
-    lat = models.FloatField(null=True, blank=True)
-    lon = models.FloatField(null=True, blank=True)
+    lat = models.FloatField()
+    lon = models.FloatField()
     pokemon = models.ForeignKey(
         Pokemon, related_name='pokemon_entities', on_delete=models.CASCADE
     )
-    appeared_at = models.DateTimeField(
-        default=None, blank=True, verbose_name='Появился в')
-    disappeared_at = models.DateTimeField(
-        default=None, blank=True, verbose_name='Исчез в')
+    appeared_at = models.DateTimeField(verbose_name='Появился в')
+    disappeared_at = models.DateTimeField(verbose_name='Исчез в')
     level = models.IntegerField(
         default=None, null=True, blank=True, verbose_name='Уровень')
     health = models.IntegerField(
