@@ -5,13 +5,14 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from pokemon_entities.models import Pokemon
 from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 
 
 MOSCOW_CENTER = [55.751244, 37.618423]
 DEFAULT_IMAGE_URL = "https://vignette.wikia.nocookie.net/pokemon/images/6/6e/%21.png/revision/latest/fixed-aspect-ratio-down/width/240/height/240?cb=20130525215832&fill=transparent"
 
 
-def add_pokemon(folium_map, lat, lon, name, image_url=DEFAULT_IMAGE_URL):
+def add_pokemon(folium_map, lat, lon, name, popup, image_url=DEFAULT_IMAGE_URL):
     icon = folium.features.CustomIcon(
         image_url,
         icon_size=(50, 50),
@@ -20,6 +21,7 @@ def add_pokemon(folium_map, lat, lon, name, image_url=DEFAULT_IMAGE_URL):
         [lat, lon],
         tooltip=name,
         icon=icon,
+        popup=popup,
     ).add_to(folium_map)
 
 
@@ -29,9 +31,16 @@ def show_all_pokemons(request):
 
     for pokemon in pokemons:
         for pokemon_entity in pokemon.pokemon_entities.all():
+            url = '<a href="{}" target="_top">{}</a>'.format(
+                request.build_absolute_uri(reverse('pokemon', args=[str(pokemon.id)])),
+                    pokemon.title_ru,
+                )
+            pokemon_url = folium.Html(url, script=True)
+            popup = folium.Popup(pokemon_url, max_width=3000)
             add_pokemon(
                 folium_map, pokemon_entity.lat, pokemon_entity.lon,
                 pokemon.title_ru,
+                popup,
                 pokemon.img_url
             )
 
@@ -81,7 +90,7 @@ def show_pokemon(request, pokemon_id):
 
         add_pokemon(
             folium_map, pokemon_entity.lat, pokemon_entity.lon,
-            pokemon.title_ru, pokemon.img_url
+            pokemon.title_ru, pokemon.title_ru, pokemon.img_url
         )
 
     return render(request, "pokemon.html", context={'map': folium_map._repr_html_(),

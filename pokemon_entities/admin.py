@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Pokemon, PokemonEntity
+from .models import Pokemon, PokemonEntity, PokemonElementType
 
 
 class PokemonEntityInline(admin.TabularInline):
@@ -16,6 +16,10 @@ class PokemonAdmin(admin.ModelAdmin):
 class PokemonEntityAdmin(admin.ModelAdmin):
     pass
 
+
+@admin.register(PokemonElementType)
+class PokemonElementTypeAdmin(admin.ModelAdmin):
+    pass
 
 
 

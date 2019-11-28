@@ -5,6 +5,14 @@ from django.db import models
 exposed_request = ''
 
 
+class PokemonElementType(models.Model):
+    title = models.CharField(
+        max_length=200, verbose_name='Стихии')
+
+    def __str__(self):
+        return self.title
+
+
 class Pokemon(models.Model):
     """Покемон"""
     title_ru = models.CharField(
@@ -24,6 +32,8 @@ class Pokemon(models.Model):
         on_delete=models.SET_NULL,
         related_name='next_evolutions'
     )
+    element_type = models.ManyToManyField(
+        PokemonElementType, related_name='pokemons')
 
     @property
     def img_url(self):
