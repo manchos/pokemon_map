@@ -63,7 +63,7 @@
             <h4>Стихии покемона</h4>
             {% for element in pokemon.element_type%}
               <div>
-                <img class="pull-left mr-2 float-left" style="height:20px;width:20px;" src="{{element.img}}">
+                <img class="pull-left mr-2 float-left" style="height:20px;width:20px;" src="{{element.img_url}}">
                 <p>{{element.title}}, силён против: {{element.strong_against|join:", "}}</p>
               </div>
             {% endfor %}

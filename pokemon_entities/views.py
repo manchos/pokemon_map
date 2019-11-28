@@ -75,6 +75,14 @@ def show_pokemon(request, pokemon_id):
     except ObjectDoesNotExist:
         pokemon_next_evolution = None
 
+    element_type_list = []
+    for element_type in pokemon.element_type.all():
+        element_type_list.append({
+            'img_url': element_type.img_url,
+            'title': element_type.title,
+            'strong_against': element_type.weakers.all()
+        })
+
     pokemon_on_page = {
         'pokemon_id': pokemon.id,
         'img_url': pokemon.img_url,
@@ -84,7 +92,10 @@ def show_pokemon(request, pokemon_id):
         'title_jp': pokemon.title_jp,
         'previous_evolution': pokemon.previous_evolution,
         'next_evolution': pokemon_next_evolution,
+        'element_type': element_type_list,
     }
+
+
 
     for pokemon_entity in pokemon.pokemon_entities.all():
 

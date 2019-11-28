@@ -19,7 +19,7 @@ class PokemonEntityAdmin(admin.ModelAdmin):
 
 @admin.register(PokemonElementType)
 class PokemonElementTypeAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'img')
 
 
 

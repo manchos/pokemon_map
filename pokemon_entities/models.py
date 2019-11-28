@@ -8,9 +8,22 @@ exposed_request = ''
 class PokemonElementType(models.Model):
     title = models.CharField(
         max_length=200, verbose_name='Стихии')
+    img = models.ImageField(
+        upload_to='element_types', null=True, blank=True, verbose_name='Изображение')
+    weakers = models.ManyToManyField(
+        "self", verbose_name='Силен против', related_name='strongers', symmetrical=False,
+    )
+
+    @property
+    def img_url(self):
+        return exposed_request.build_absolute_uri(self.img.url)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = 'Стихия'
+        verbose_name_plural = 'Стихии'
 
 
 class Pokemon(models.Model):
