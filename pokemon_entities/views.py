@@ -95,8 +95,6 @@ def show_pokemon(request, pokemon_id):
         'element_type': element_type_list,
     }
 
-
-
     for pokemon_entity in pokemon.pokemon_entities.all():
 
         add_pokemon(
