@@ -1,8 +1,6 @@
 from django.db import models
 
-
-# used for img_url by pokemon_entities.exposed_request.RequestExposerMiddleware
-exposed_request = ''
+from django.contrib.sites.models import Site
 
 
 class PokemonElementType(models.Model):
@@ -18,12 +16,13 @@ class PokemonElementType(models.Model):
         "self", verbose_name='Силен против',
         related_name='strongers',
         symmetrical=False,
-        null=True, blank=True
+        blank=True
     )
 
     @property
     def img_url(self):
-        return exposed_request.build_absolute_uri(self.img.url)
+        return 'http://{}{}'.format(Site.objects.get_current().domain,
+                                     self.img.url)
 
     def __str__(self):
         return self.title
@@ -60,16 +59,15 @@ class Pokemon(models.Model):
         on_delete=models.SET_NULL,
         related_name='next_evolutions'
     )
-    element_type = models.ManyToManyField(
+    element_types = models.ManyToManyField(
         PokemonElementType,
         verbose_name='Стихия',
         related_name='pokemons',)
 
     @property
     def img_url(self):
-        return exposed_request.build_absolute_uri(self.photo.url)
-
-
+        return 'http://{}{}'.format(Site.objects.get_current().domain,
+                                 self.photo.url)
 
     def __str__(self):
         return f"{self.title_ru}"

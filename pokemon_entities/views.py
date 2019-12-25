@@ -64,7 +64,9 @@ def show_pokemon(request, pokemon_id):
         pokemon = Pokemon.objects.prefetch_related('pokemon_entities').get(
             pk=int(pokemon_id)
         )
-
+    except ValueError:
+        return HttpResponseNotFound('<h1>В строке адреса должен быть '
+                                    'идентификатор из целого числа</h1>')
     except ObjectDoesNotExist:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
@@ -76,7 +78,7 @@ def show_pokemon(request, pokemon_id):
         pokemon_next_evolution = None
 
     element_type_list = []
-    for element_type in pokemon.element_type.all():
+    for element_type in pokemon.element_types.all():
         element_type_list.append({
             'img_url': element_type.img_url,
             'title': element_type.title,
