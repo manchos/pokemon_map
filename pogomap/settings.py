@@ -52,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'pokemon_entities.exposed_request.RequestExposerMiddleware'
 ]
 
 ROOT_URLCONF = 'pogomap.urls'
